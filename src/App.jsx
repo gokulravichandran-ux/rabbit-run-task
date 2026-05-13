@@ -145,7 +145,7 @@ function RabbitFilterDropdown() {
             borderRadius: "50px",
             padding: "0 12px 0 24px",
             height: "54px",
-            minWidth: hasInteracted ? "190px" : "160px",
+            minWidth: "190px",
             cursor: "pointer",
             userSelect: "none",
             transition: "all 0.3s ease",
@@ -181,7 +181,7 @@ function RabbitFilterDropdown() {
                 <Typography
                   sx={{
                     color: "white",
-                    fontSize: "0.rem",
+                    fontSize: "0.8rem",
                     fontWeight: 500,
                     mt: 0.4,
                     lineHeight: 1,
