@@ -143,7 +143,7 @@ function RabbitFilterDropdown() {
           </Box>
         </Box>
         <Popper open={filterOpen} anchorEl={filterAnchorRef.current} placement="bottom-start" sx={{ zIndex: 1300 }}>
-          <Box sx={{ backgroundColor: "#fff", borderRadius: "16px", boxShadow: "0px 8px 32px rgba(0,0,0,0.18)", minWidth: "260px", overflow: "hidden", py: 1 }}>
+          <Box sx={{ backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0px 8px 32px rgba(0,0,0,0.18)", minWidth: "260px", overflow: "hidden", py: 1 }}>
             {FILTER_GROUPS.map((group, gi) => {
               const { allChecked, indeterminate } = getGroupState(group);
               return (
@@ -324,6 +324,16 @@ function App() {
                 popper: {
                   anchorEl: () => anchorRef.current,
                   placement: "bottom-start",
+                  popperOptions: {
+                    modifiers: [
+                      {
+                        name: 'offset',
+                        options: {
+                          offset: [0, 4],
+                        },
+                      },
+                    ],
+                  },
                   sx: { "& .MuiPaper-root": { borderRadius: "12px", background: "transparent", boxShadow: "none" } },
                 },
               }}
