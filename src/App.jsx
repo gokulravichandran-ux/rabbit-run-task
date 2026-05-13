@@ -1,3 +1,4 @@
+import React, { useState, useRef } from "react";
 import {
   AppBar,
   Toolbar,
@@ -38,9 +39,8 @@ import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { PickersLayout } from "@mui/x-date-pickers/PickersLayout";
 
 import dayjs from "dayjs";
-import { useState, useRef } from "react";
 
-// Rabbit Filter Data 
+// Data Constants
 const FILTER_GROUPS = [
   {
     id: "rabbit-usa",
@@ -74,11 +74,18 @@ const buildInitialChecked = () => {
   const state = {};
   FILTER_GROUPS.forEach((g) => {
     state[g.id] = true;
-    g.children.forEach((c) => { state[c.id] = true; });
+    g.children.forEach((c) => {
+      state[c.id] = true;
+    });
   });
   return state;
 };
 
+//Sub-Components
+
+/**
+ * Rabbit Filter Dropdown
+ */
 function RabbitFilterDropdown() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [checked, setChecked] = useState(buildInitialChecked);
@@ -95,7 +102,9 @@ function RabbitFilterDropdown() {
     const { allChecked } = getGroupState(group);
     setChecked((prev) => {
       const next = { ...prev, [group.id]: !allChecked };
-      group.children.forEach((c) => { next[c.id] = !allChecked; });
+      group.children.forEach((c) => {
+        next[c.id] = !allChecked;
+      });
       return next;
     });
   };
@@ -111,7 +120,10 @@ function RabbitFilterDropdown() {
 
   const totalLeafIds = FILTER_GROUPS.flatMap((g) => g.children.map((c) => c.id));
   const checkedLeafs = totalLeafIds.filter((id) => checked[id]);
-  const buttonLabel = checkedLeafs.length === totalLeafIds.length ? "All Rabbits" : `${checkedLeafs.length} Selected`;
+  const buttonLabel =
+    checkedLeafs.length === totalLeafIds.length
+      ? "All Rabbits"
+      : `${checkedLeafs.length} Selected`;
 
   const [hasInteracted, setHasInteracted] = useState(false);
 
@@ -120,45 +132,168 @@ function RabbitFilterDropdown() {
       <Box sx={{ position: "relative" }}>
         <Box
           ref={filterAnchorRef}
-          onClick={() => { setFilterOpen((o) => !o); setHasInteracted(true); }}
+          onClick={() => {
+            setFilterOpen((o) => !o);
+            setHasInteracted(true);
+          }}
           sx={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            backgroundColor: "#1c2a46", border: "1px solid #3e4859", borderRadius: "50px",
-            padding: "0 12px 0 24px", height: "54px", minWidth: hasInteracted ? "190px" : "160px",
-            cursor: "pointer", userSelect: "none", "&:hover": { borderColor: "#5c6b82" },
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            backgroundColor: "#1c2a46",
+            border: "1px solid #3e4859",
+            borderRadius: "50px",
+            padding: "0 12px 0 24px",
+            height: "54px",
+            minWidth: hasInteracted ? "190px" : "160px",
+            cursor: "pointer",
+            userSelect: "none",
+            transition: "all 0.3s ease",
+            "&:hover": { borderColor: "#5c6b82" },
           }}
         >
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             {!hasInteracted ? (
-              <Typography sx={{ color: "white", fontSize: "0.95rem", fontWeight: 500, lineHeight: 1 }}>Rabbit Filter</Typography>
+              <Typography
+                sx={{
+                  color: "white",
+                  fontSize: "0.95rem",
+                  fontWeight: 500,
+                  lineHeight: 1,
+                }}
+              >
+                Rabbit Filter
+              </Typography>
             ) : (
               <>
-                <Typography sx={{ color: "#8b949e", fontSize: "0.7rem", fontWeight: "medium", textTransform: "capitalize", alignSelf: "flex-start", lineHeight: 1 }}>Rabbit Filter</Typography>
-                <Typography sx={{ color: "white", fontSize: "0.95rem", fontWeight: 500, mt: 0.4, lineHeight: 1 }}>{buttonLabel}</Typography>
+                <Typography
+                  sx={{
+                    color: "#8b949e",
+                    fontSize: "0.7rem",
+                    fontWeight: "medium",
+                    textTransform: "capitalize",
+                    alignSelf: "flex-start",
+                    lineHeight: 1,
+                  }}
+                >
+                  Rabbit Filter
+                </Typography>
+                <Typography
+                  sx={{
+                    color: "white",
+                    fontSize: "0.rem",
+                    fontWeight: 500,
+                    mt: 0.4,
+                    lineHeight: 1,
+                  }}
+                >
+                  {buttonLabel}
+                </Typography>
               </>
             )}
           </Box>
-          <Box sx={{ width: 34, height: 34, borderRadius: "50%", backgroundColor: "transparent", border: "1px solid #3e4859", display: "flex", alignItems: "center", justifyContent: "center", ml: 1.5, flexShrink: 0 }}>
-            {filterOpen ? <KeyboardArrowUpIcon sx={{ color: "white", fontSize: 20 }} /> : <KeyboardArrowDownIcon sx={{ color: "white", fontSize: 20 }} />}
+          <Box
+            sx={{
+              width: 34,
+              height: 34,
+              borderRadius: "50%",
+              backgroundColor: "transparent",
+              border: "1px solid #3e4859",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              ml: 1.5,
+              flexShrink: 0,
+            }}
+          >
+            {filterOpen ? (
+              <KeyboardArrowUpIcon sx={{ color: "white", fontSize: 20 }} />
+            ) : (
+              <KeyboardArrowDownIcon sx={{ color: "white", fontSize: 20 }} />
+            )}
           </Box>
         </Box>
-        <Popper open={filterOpen} anchorEl={filterAnchorRef.current} placement="bottom-start" sx={{ zIndex: 1300 }}>
-          <Box sx={{ backgroundColor: "#fff", borderRadius: "8px", boxShadow: "0px 8px 32px rgba(0,0,0,0.18)", minWidth: "260px", overflow: "hidden", py: 1 }}>
+        <Popper
+          open={filterOpen}
+          anchorEl={filterAnchorRef.current}
+          placement="bottom-start"
+          sx={{ zIndex: 1300 }}
+        >
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              borderRadius: "8px",
+              boxShadow: "0px 8px 32px rgba(0,0,0,0.18)",
+              minWidth: "260px",
+              overflow: "hidden",
+              py: 1,
+              mt: 1,
+            }}
+          >
             {FILTER_GROUPS.map((group, gi) => {
               const { allChecked, indeterminate } = getGroupState(group);
               return (
                 <Box key={group.id}>
-                  <Box sx={{ display: "flex", alignItems: "center", px: 2, py: 0.5, cursor: "pointer", "&:hover": { backgroundColor: "#f5f7fa" } }} onClick={() => handleGroupToggle(group)}>
-                    <Checkbox checked={allChecked} indeterminate={indeterminate} sx={{ color: "#335c6b", "&.Mui-checked": { color: "#335c6b" } }} />
-                    <Typography sx={{ fontWeight: 700, fontSize: "0.9rem", color: "#1a2436", ml: 0.5 }}>{group.label}</Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      px: 2,
+                      py: 0.5,
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f5f7fa" },
+                    }}
+                    onClick={() => handleGroupToggle(group)}
+                  >
+                    <Checkbox
+                      checked={allChecked}
+                      indeterminate={indeterminate}
+                      sx={{
+                        color: "#335c6b",
+                        "&.Mui-checked": { color: "#335c6b" },
+                      }}
+                    />
+                    <Typography
+                      sx={{
+                        fontWeight: 700,
+                        fontSize: "0.9rem",
+                        color: "#1a2436",
+                        ml: 0.5,
+                      }}
+                    >
+                      {group.label}
+                    </Typography>
                   </Box>
                   {group.children.map((child) => (
-                    <Box key={child.id} sx={{ display: "flex", alignItems: "center", px: 2, py: 0.25, cursor: "pointer", "&:hover": { backgroundColor: "#f5f7fa" } }} onClick={() => handleChildToggle(group, child.id)}>
-                      <Checkbox checked={!!checked[child.id]} sx={{ color: "#335c6b", "&.Mui-checked": { color: "#335c6b" } }} />
-                      <Typography sx={{ fontSize: "0.875rem", color: "#1a2436", ml: 0.5 }}>{child.label}</Typography>
+                    <Box
+                      key={child.id}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        px: 2,
+                        py: 0.25,
+                        cursor: "pointer",
+                        "&:hover": { backgroundColor: "#f5f7fa" },
+                      }}
+                      onClick={() => handleChildToggle(group, child.id)}
+                    >
+                      <Checkbox
+                        checked={!!checked[child.id]}
+                        sx={{
+                          color: "#335c6b",
+                          "&.Mui-checked": { color: "#335c6b" },
+                        }}
+                      />
+                      <Typography
+                        sx={{ fontSize: "0.875rem", color: "#1a2436", ml: 0.5 }}
+                      >
+                        {child.label}
+                      </Typography>
                     </Box>
                   ))}
-                  {gi < FILTER_GROUPS.length - 1 && <Divider sx={{ my: 1, borderColor: "#e8eaed" }} />}
+                  {gi < FILTER_GROUPS.length - 1 && (
+                    <Divider sx={{ my: 1, borderColor: "#e8eaed" }} />
+                  )}
                 </Box>
               );
             })}
@@ -169,8 +304,11 @@ function RabbitFilterDropdown() {
   );
 }
 
-//DatePickerField with Smooth Floating Label 
-function DatePickerField({ date, anchorRef, onOpen, isOpen }) {
+/**
+ * Custom DatePicker Field with Smooth Floating Label
+ */
+function DatePickerField(props) {
+  const { date, isOpen, onOpen, anchorRef } = props;
   const isFloating = isOpen || !!date;
 
   return (
@@ -185,67 +323,128 @@ function DatePickerField({ date, anchorRef, onOpen, isOpen }) {
         borderColor: isFloating ? "#5c6b82" : "#3e4859",
         borderRadius: "50px",
         padding: "0px 24px",
-        minWidth: "180px",
-        height: "54px",
+        minWidth: "210px",
+        height: "54px", // Fixed height pill
         cursor: "pointer",
-        transition: "border-color 0.25s ease",
+        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
         "&:hover": { borderColor: "#5c6b82" },
       }}
     >
+      {/* Icon: Always perfectly centered vertically by the parent flex */}
       <CalendarTodayOutlinedIcon
         sx={{
-          color: isFloating ? "white" : "#8b949e",
+          color: "white",
           mr: 1.5,
           fontSize: "20px",
-          transition: "color 0.25s ease"
         }}
       />
-      <Box sx={{ position: "relative", height: "38px", flexGrow: 1 }}>
-        {/* Label — scales down & shifts to top */}
+
+      {/* Text Container: This block is centered vertically as one unit */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          height: "100%",
+          overflow: "hidden",
+        }}
+      >
+        {/* Label */}
         <Typography
           sx={{
-            position: "absolute",
-            left: 0,
-            top: "50%",
-            color: isFloating ? "#8b949e" : "#fff",
+            color: isFloating ? "#8b949e" : "white",
             fontSize: "1rem",
             fontWeight: 500,
-            lineHeight: 1,
-            transformOrigin: "left top",
-            transform: isFloating
-              ? "translateY(-19px) scale(0.74)"
-              : "translateY(-50%) scale(1)",
-            transition:
-              "transform 500ms cubic-bezier(0.16, 1, 0.3, 1), color 500ms ease",
+            lineHeight: 1.1,
             whiteSpace: "nowrap",
-            pointerEvents: "none",
+            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            transformOrigin: "left center",
+            // Scale down when floating, and add a tiny bit of bottom margin to clear the date
+            transform: isFloating ? "scale(0.75)" : "scale(1)",
+            mb: isFloating ? "2px" : "0px",
           }}
         >
           Datepicker
         </Typography>
-        {/* Date value — fades + slides up into view */}
+
+        {/* Date: Only takes up space and shows when isFloating is true */}
         <Typography
           sx={{
-            position: "absolute",
-            left: 0,
-            bottom: 2,
             color: "white",
-            fontSize: "0.95rem",
+            fontSize: "0.8rem",
             fontWeight: 500,
             lineHeight: 1,
             whiteSpace: "nowrap",
-            opacity: date ? 1 : 0,
-            transform: date ? "translateY(0px)" : "translateY(6px)",
-            transition: "opacity 0.2s ease, transform 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
+            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+            // Use height and opacity to slide it in without "snapping"
+            height: isFloating ? "auto" : "0px",
+            opacity: isFloating ? 1 : 0,
             pointerEvents: "none",
           }}
         >
-          {date ? date.format("DD-MMM-YYYY") : ""}
+          {date ? date.format("DD-MMM-YYYY") : dayjs().format("DD-MMM-YYYY")}
         </Typography>
       </Box>
     </Box>
   );
 }
+
+function CustomPickerLayout(props) {
+  // We take value from props (provided by MUI) 
+  // or selectedDate (passed manually via slotProps)
+  const { value, selectedDate } = props;
+
+  // Use whichever one is available and valid
+  const displayDate = selectedDate || value;
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        width: 320,
+        backgroundColor: "#fff",
+        borderRadius: "12px",
+        border: "1px solid #ebedf0",
+        overflow: "hidden",
+        boxShadow: "0px 12px 36px rgba(0,0,0,0.12)",
+      }}
+    >
+      <Box sx={{ px: 3, pt: 3, pb: 1 }}>
+        <Typography
+          sx={{
+            color: "#6e7781",
+            fontSize: "0.75rem",
+            fontWeight: 400,
+            mb: 0.5,
+            textTransform: "uppercase",
+            letterSpacing: "0.5px"
+          }}
+        >
+          {displayDate ? "Selected Date" : "Please Select"}
+        </Typography>
+        <Typography
+          sx={{
+            color: "#335c6b",
+            fontSize: "1.3rem",
+            fontWeight: 800,
+            lineHeight: 1.2
+          }}
+        >
+          {/* Format the date if it exists, otherwise show placeholder */}
+          {displayDate && dayjs(displayDate).isValid()
+            ? dayjs(displayDate).format("ddd, MMM D")
+            : dayjs().format("ddd, MMM D")}
+        </Typography>
+      </Box>
+
+      {/* This renders the calendar itself */}
+      <PickersLayout {...props} />
+    </Box>
+  );
+}
+
+//Main App Component
 
 function App() {
   const [date, setDate] = useState(null);
@@ -273,13 +472,37 @@ function App() {
 
   return (
     <Box sx={{ flexGrow: 1, minHeight: "100vh", backgroundColor: "#ffffff" }}>
-      <AppBar position="static" sx={{ backgroundColor: "#071633", borderBottom: "2px solid #7ED321", boxShadow: "none" }}>
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between", padding: "12px 24px" }}>
+      {/* Top Navbar */}
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: "#071633",
+          borderBottom: "2px solid #7ED321",
+          boxShadow: "none",
+        }}
+      >
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "12px 24px",
+          }}
+        >
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <Typography variant="h5" sx={{ letterSpacing: "4px", fontWeight: 300, color: "white", fontFamily: "Times New Roman, serif" }}>RABBIT RUN</Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                letterSpacing: "4px",
+                fontWeight: 300,
+                color: "white",
+                fontFamily: "Times New Roman, serif",
+              }}
+            >
+              RABBIT RUN
+            </Typography>
           </Box>
           <Box sx={{ display: "flex", gap: 4 }}>
-            <Button sx={{ color: "white", textTransform: "uppercase", }}>Dashboard</Button>
+            <Button sx={{ color: "white", textTransform: "uppercase" }}>Dashboard</Button>
             <Button sx={{ color: "white", textTransform: "uppercase" }}>Summary</Button>
             <Button sx={{ color: "white", textTransform: "uppercase" }}>Support</Button>
           </Box>
@@ -291,7 +514,16 @@ function App() {
         </Toolbar>
       </AppBar>
 
-      <Box sx={{ backgroundColor: "#111d35", padding: "16px 24px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      {/* Sub-Header with Filters */}
+      <Box
+        sx={{
+          backgroundColor: "#111d35",
+          padding: "16px 24px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DesktopDatePicker
@@ -302,39 +534,47 @@ function App() {
               onChange={(newValue) => setDate(newValue)}
               format="DD-MMM-YYYY"
               slots={{
-                field: () => (
-                  <DatePickerField
-                    date={date}
-                    isOpen={open}
-                    anchorRef={anchorRef}
-                    onOpen={() => setOpen(true)}
-                  />
-                ),
-                layout: (props) => (
-                  <Box sx={{ display: "flex", flexDirection: "column", width: 360, backgroundColor: "#fff", borderRadius: "12px", border: "1px solid #ebedf0", overflow: "hidden", boxShadow: "0px 12px 36px rgba(0,0,0,0.12)" }}>
-                    <Box sx={{ px: 3, pt: 3, pb: 1 }}>
-                      <Typography sx={{ color: "#6e7781", fontSize: "0.75rem", fontWeight: 500, mb: 0.8 }}>SELECT DATE</Typography>
-                      <Typography sx={{ color: "#335c6b", fontSize: "1.25rem", fontWeight: 800 }}>{date ? date.format("ddd, MMM D") : "Select date"}</Typography>
-                    </Box>
-                    <PickersLayout {...props} />
-                  </Box>
-                ),
+                field: DatePickerField,
+                layout: CustomPickerLayout,
               }}
               slotProps={{
+                field: {
+                  date: date,
+                  isOpen: open,
+                  onOpen: () => setOpen(true),
+                  anchorRef: anchorRef,
+                },
+                layout: {
+                  selectedDate: date,
+                },
+                day: {
+                  sx: {
+                    "&.Mui-selected": {
+                      backgroundColor: "#335c6b !important",
+                      color: "#ffffff !important",
+                      "&:hover": {
+                        backgroundColor: "#1c2a46 !important",
+                      },
+                    },
+                    "&.MuiPickersDay-today": {
+                      borderColor: "#335c6b",
+                    },
+                    "&:hover": {
+                      backgroundColor: "rgba(51, 92, 107, 0.1)",
+                    }
+                  },
+                },
+
                 popper: {
                   anchorEl: () => anchorRef.current,
                   placement: "bottom-start",
-                  popperOptions: {
-                    modifiers: [
-                      {
-                        name: 'offset',
-                        options: {
-                          offset: [0, 4],
-                        },
-                      },
-                    ],
+                  sx: {
+                    "& .MuiPaper-root": {
+                      borderRadius: "12px",
+                      background: "transparent",
+                      boxShadow: "none",
+                    },
                   },
-                  sx: { "& .MuiPaper-root": { borderRadius: "12px", background: "transparent", boxShadow: "none" } },
                 },
               }}
             />
@@ -343,45 +583,100 @@ function App() {
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Button variant="contained" endIcon={<KeyboardArrowDownIcon />} sx={{ background: "linear-gradient(135deg, #024FBD 0%, #2C88F3 100%) !important", borderRadius: "30px", padding: "10px 28px", textTransform: "none", boxShadow: "none" }}>Actions</Button>
-          <IconButton sx={{ color: "white" }}><MoreVertIcon /></IconButton>
+          <Button
+            variant="contained"
+            endIcon={<KeyboardArrowDownIcon />}
+            sx={{
+              background: "linear-gradient(135deg, #024FBD 0%, #2C88F3 100%) !important",
+              borderRadius: "30px",
+              padding: "10px 28px",
+              textTransform: "none",
+              boxShadow: "none",
+            }}
+          >
+            Actions
+          </Button>
+          <IconButton sx={{ color: "white" }}>
+            <MoreVertIcon />
+          </IconButton>
         </Box>
       </Box>
 
       {/* Main Content Area */}
       <Box sx={{ p: 3, backgroundColor: "#f8f9fa", minHeight: "calc(100vh - 160px)" }}>
         <Grid container spacing={3}>
-          <Grid item sx={{ width: "50%" }}>
-            <Card sx={{ borderRadius: "8px", boxShadow: "0px 2px 8px rgba(0,0,0,0.1)", height: "100%" }}>
-              <Box sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography sx={{ color: "#335c6b", fontWeight: "bold", fontSize: "1.1rem" }}>Rabbit Card One</Typography>
+          {/* Table Card */}
+          <Grid item xs={12} md={6}>
+            <Card
+              sx={{
+                borderRadius: "8px",
+                boxShadow: "0px 2px 8px rgba(0,0,0,0.1)",
+                height: "100%",
+              }}
+            >
+              <Box
+                sx={{
+                  p: 2,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <Typography sx={{ color: "#335c6b", fontWeight: "bold", fontSize: "1.1rem" }}>
+                  Rabbit Card One
+                </Typography>
                 <Box sx={{ display: "flex", gap: 0.5 }}>
-                  <IconButton size="small"><OpenInFullIcon sx={{ fontSize: 18, color: "#335c6b" }} /></IconButton>
-                  <IconButton size="small"><MoreVertIcon sx={{ fontSize: 18, color: "#335c6b" }} /></IconButton>
+                  <IconButton size="small">
+                    <OpenInFullIcon sx={{ fontSize: 18, color: "#335c6b" }} />
+                  </IconButton>
+                  <IconButton size="small">
+                    <MoreVertIcon sx={{ fontSize: 18, color: "#335c6b" }} />
+                  </IconButton>
                 </Box>
               </Box>
               <CardContent sx={{ pt: 0 }}>
-                <TableContainer component={Paper} elevation={0} sx={{ borderTop: "1px solid #eee", borderBottom: "1px solid #eee" }}>
+                <TableContainer
+                  component={Paper}
+                  elevation={0}
+                  sx={{ borderTop: "1px solid #eee", borderBottom: "1px solid #eee" }}
+                >
                   <Table size="small">
                     <TableHead>
                       <TableRow sx={{ backgroundColor: "#f8f9fa" }}>
-                        <TableCell sx={{ fontWeight: "bold", color: "#555" }}>Rabbit Header One</TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>Header Two</TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>H Three</TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>H Four</TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>H Five</TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>H Value</TableCell>
+                        <TableCell sx={{ fontWeight: "bold", color: "#555" }}>
+                          Rabbit Header One
+                        </TableCell>
+                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                          Header Two
+                        </TableCell>
+                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                          H Three
+                        </TableCell>
+                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                          H Four
+                        </TableCell>
+                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                          H Five
+                        </TableCell>
+                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                          H Value
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {tableData.map((row, index) => (
-                        <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                        <TableRow
+                          key={index}
+                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                        >
                           <TableCell sx={{ color: "#333", py: 1.5 }}>{row.name}</TableCell>
                           <TableCell align="right">{row.h2}</TableCell>
                           <TableCell align="right">{row.h3}</TableCell>
                           <TableCell align="right">{row.h4}</TableCell>
                           <TableCell align="right">{row.h5}</TableCell>
-                          <TableCell align="right" sx={{ fontWeight: "bold" }}>{row.val}</TableCell>
+                          <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                            {row.val}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -391,6 +686,7 @@ function App() {
             </Card>
           </Grid>
 
+          {/* Chart Card */}
           <Grid item sx={{ width: "48%" }}>
             <Card sx={{ borderRadius: "8px", boxShadow: "0px 2px 8px rgba(0,0,0,0.1)", height: "100%" }}>
               <Box sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
