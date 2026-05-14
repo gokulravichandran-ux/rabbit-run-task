@@ -656,22 +656,22 @@ function App() {
                 <Table size="small">
                   <TableHead>
                     <TableRow sx={{ backgroundColor: "#f8f9fa" }}>
-                      <TableCell sx={{ fontWeight: "bold", color: "#555" }}>
+                      <TableCell sx={{ fontWeight: "bold", fontSize: "0.85rem", color: "#555" }}>
                         Rabbit Header One
                       </TableCell>
-                      <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                      <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.85rem", color: "#555" }}>
                         Header Two
                       </TableCell>
-                      <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                      <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.85rem", color: "#555" }}>
                         H Three
                       </TableCell>
-                      <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                      <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.85rem", color: "#555" }}>
                         H Four
                       </TableCell>
-                      <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                      <TableCell align="center" sx={{ fontWeight: "bold", fontSize: "0.85rem", color: "#555" }}>
                         H Five
                       </TableCell>
-                      <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                      <TableCell align="right" sx={{ fontWeight: "bold", fontSize: "0.85rem", color: "#555" }}>
                         H Value
                       </TableCell>
                     </TableRow>
@@ -683,10 +683,10 @@ function App() {
                         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                       >
                         <TableCell sx={{ color: "#333", py: 1.5 }}>{row.name}</TableCell>
-                        <TableCell align="right">{row.h2}</TableCell>
-                        <TableCell align="right">{row.h3}</TableCell>
-                        <TableCell align="right">{row.h4}</TableCell>
-                        <TableCell align="right">{row.h5}</TableCell>
+                        <TableCell align="center">{row.h2}</TableCell>
+                        <TableCell align="center">{row.h3}</TableCell>
+                        <TableCell align="center">{row.h4}</TableCell>
+                        <TableCell align="center">{row.h5}</TableCell>
                         <TableCell align="right" sx={{ fontWeight: "bold" }}>
                           {row.val}
                         </TableCell>
