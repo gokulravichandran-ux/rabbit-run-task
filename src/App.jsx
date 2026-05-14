@@ -64,7 +64,7 @@ const FILTER_GROUPS = [
     label: "CM DPG",
     children: [
       { id: "nikko-america", label: "Nikko America" },
-      { id: "manub银行", label: "Manubank" },
+      { id: "manubank", label: "Manubank" },
       { id: "leasing-finance", label: "Leasing Finance" },
     ],
   },
@@ -334,6 +334,7 @@ function DatePickerField(props) {
       <CalendarTodayOutlinedIcon
         sx={{
           color: "white",
+          opacity: isFloating ? 1 : 0.2,
           mr: 1.5,
           fontSize: "20px",
         }}
@@ -414,7 +415,7 @@ function CustomPickerLayout(props) {
         <Typography
           sx={{
             color: "#6e7781",
-            fontSize: "0.75rem",
+            fontSize: "0.6rem",
             fontWeight: 400,
             mb: 0.5,
             textTransform: "uppercase",
@@ -604,104 +605,125 @@ function App() {
 
       {/* Main Content Area */}
       <Box sx={{ p: 3, backgroundColor: "#f8f9fa", minHeight: "calc(100vh - 160px)" }}>
-        <Grid container spacing={3}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", lg: "repeat(2, 1fr)" },
+            gap: 3
+          }}
+        >
           {/* Table Card */}
-          <Grid item xs={12} md={6}>
-            <Card
+          <Card
+            sx={{
+              borderRadius: "8px",
+              boxShadow: "0px 2px 8px rgba(0,0,0,0.1)",
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+
+            }}
+          >
+            <Box
               sx={{
-                borderRadius: "8px",
-                boxShadow: "0px 2px 8px rgba(0,0,0,0.1)",
-                height: "100%",
+                p: 2,
+                pl: 4,
+                pr: 2,
+                pt: 4,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
-              <Box
-                sx={{
-                  p: 2,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Typography sx={{ color: "#335c6b", fontWeight: "bold", fontSize: "1.1rem" }}>
-                  Rabbit Card One
-                </Typography>
-                <Box sx={{ display: "flex", gap: 0.5 }}>
-                  <IconButton size="small">
-                    <OpenInFullIcon sx={{ fontSize: 18, color: "#335c6b" }} />
-                  </IconButton>
-                  <IconButton size="small">
-                    <MoreVertIcon sx={{ fontSize: 18, color: "#335c6b" }} />
-                  </IconButton>
-                </Box>
+              <Typography sx={{ color: "#285B6C", fontWeight: "regular", fontSize: "1rem" }}>
+                Rabbit Card One
+              </Typography>
+              <Box sx={{ display: "flex", gap: 0.5 }}>
+                <IconButton size="small">
+                  <OpenInFullIcon sx={{ fontSize: 18, color: "#335c6b" }} />
+                </IconButton>
+                <IconButton size="small">
+                  <MoreVertIcon sx={{ fontSize: 18, color: "#335c6b" }} />
+                </IconButton>
               </Box>
-              <CardContent sx={{ pt: 0 }}>
-                <TableContainer
-                  component={Paper}
-                  elevation={0}
-                  sx={{ borderTop: "1px solid #eee", borderBottom: "1px solid #eee" }}
-                >
-                  <Table size="small">
-                    <TableHead>
-                      <TableRow sx={{ backgroundColor: "#f8f9fa" }}>
-                        <TableCell sx={{ fontWeight: "bold", color: "#555" }}>
-                          Rabbit Header One
-                        </TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
-                          Header Two
-                        </TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
-                          H Three
-                        </TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
-                          H Four
-                        </TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
-                          H Five
-                        </TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
-                          H Value
+            </Box>
+            <CardContent sx={{ pt: 0, overflowX: "auto" }}>
+              <TableContainer
+                component={Paper}
+                elevation={0}
+                sx={{ borderTop: "1px solid #eee", borderBottom: "1px solid #eee" }}
+              >
+                <Table size="small">
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "#f8f9fa" }}>
+                      <TableCell sx={{ fontWeight: "bold", color: "#555" }}>
+                        Rabbit Header One
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                        Header Two
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                        H Three
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                        H Four
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                        H Five
+                      </TableCell>
+                      <TableCell align="right" sx={{ fontWeight: "bold", color: "#555" }}>
+                        H Value
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {tableData.map((row, index) => (
+                      <TableRow
+                        key={index}
+                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                      >
+                        <TableCell sx={{ color: "#333", py: 1.5 }}>{row.name}</TableCell>
+                        <TableCell align="right">{row.h2}</TableCell>
+                        <TableCell align="right">{row.h3}</TableCell>
+                        <TableCell align="right">{row.h4}</TableCell>
+                        <TableCell align="right">{row.h5}</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: "bold" }}>
+                          {row.val}
                         </TableCell>
                       </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {tableData.map((row, index) => (
-                        <TableRow
-                          key={index}
-                          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                        >
-                          <TableCell sx={{ color: "#333", py: 1.5 }}>{row.name}</TableCell>
-                          <TableCell align="right">{row.h2}</TableCell>
-                          <TableCell align="right">{row.h3}</TableCell>
-                          <TableCell align="right">{row.h4}</TableCell>
-                          <TableCell align="right">{row.h5}</TableCell>
-                          <TableCell align="right" sx={{ fontWeight: "bold" }}>
-                            {row.val}
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardContent>
-            </Card>
-          </Grid>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
 
           {/* Chart Card */}
-          <Grid item sx={{ width: "48%" }}>
-            <Card sx={{ borderRadius: "8px", boxShadow: "0px 2px 8px rgba(0,0,0,0.1)", height: "100%" }}>
-              <Box sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography sx={{ color: "#335c6b", fontWeight: "bold", fontSize: "1.1rem" }}>Rabbit Card Two</Typography>
-                <Box sx={{ display: "flex", gap: 0.5 }}>
-                  <IconButton size="small"><OpenInFullIcon sx={{ fontSize: 18, color: "#335c6b" }} /></IconButton>
-                  <IconButton size="small"><MoreVertIcon sx={{ fontSize: 18, color: "#335c6b" }} /></IconButton>
-                </Box>
+          <Card sx={{ borderRadius: "8px", boxShadow: "0px 2px 8px rgba(0,0,0,0.1)", height: "100%", width: "100%", display: "flex", flexDirection: "column" }}>
+            <Box sx={{
+              p: 2, pl: 4,
+              pr: 2,
+              pt: 4, display: "flex", justifyContent: "space-between", alignItems: "center"
+            }}>
+              <Typography sx={{ color: "#285B6C", fontWeight: "regular", fontSize: "1rem" }}>Rabbit Card Two</Typography>
+              <Box sx={{ display: "flex", gap: 0.5 }}>
+                <IconButton size="small"><OpenInFullIcon sx={{ fontSize: 18, color: "#335c6b" }} /></IconButton>
+                <IconButton size="small"><MoreVertIcon sx={{ fontSize: 18, color: "#335c6b" }} /></IconButton>
               </Box>
-              <CardContent sx={{ height: "320px", display: "flex", justifyContent: "center", alignItems: "center", pt: 0 }}>
-                <PieChart series={[{ data: chartData, innerRadius: 70, outerRadius: 100, paddingAngle: 2, cx: 180 }]} width={380} height={300} margin={{ right: 80 }} />
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+            </Box>
+            <CardContent sx={{ height: "320px", display: "flex", justifyContent: "center", alignItems: "center", pt: 0, overflow: "hidden" }}>
+              <Box sx={{ width: "100%", display: "flex", justifyContent: "center", overflowX: "auto" }}>
+                <PieChart series={[{ data: chartData, innerRadius: 70, outerRadius: 100, paddingAngle: 0, cx: 180 }]}
+                  slotProps={{
+                    pieArc: {
+                      strokeWidth: 0,
+                    },
+                  }}
+                  width={380} height={300} margin={{ right: 60 }} />
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
       </Box>
     </Box>
   );
